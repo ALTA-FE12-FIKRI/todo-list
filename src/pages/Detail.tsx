@@ -19,6 +19,10 @@ const Detail: React.FC = () => {
     navigate(`/${id}`);
   };
 
+  useEffect(() => {
+    details()
+  }, []);
+
   const handleDeleteClick = () => {
     axios
       .delete(`https://api.todoist.com/rest/v2/tasks/${id}`, {
@@ -51,24 +55,26 @@ const Detail: React.FC = () => {
       .catch((error) => console.error(error));
   };
 
-  useEffect(() => {
+  const details = () => {
     axios
-      .get(`https://api.todoist.com/rest/v2/tasks/${id}`, {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
-        },
-      })
-      .then((response) => {
-        const todo = {
-          id: response.data.id,
-          text: response.data.content,
-          completed: response.data.completed,
-        };
-        setTodo(todo);
-        console.log(response.data);
-      })
-      .catch((error) => console.error(error));
-  }, [id]);
+    .get(`https://api.todoist.com/rest/v2/tasks/${id}`, {
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+      },
+    })
+    .then((response) => {
+      const todo = {
+        id: response.data.id,
+        text: response.data.content,
+        completed: response.data.completed,
+      };
+      setTodo(todo);
+      console.log(response.data);
+    })
+    .catch((error) => console.error(error));
+  }
+
+  
 
   if (!todo) {
     return (
